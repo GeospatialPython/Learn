@@ -9,7 +9,7 @@ w.field("NAME", "C", "40")
 w.field("AREA", "C", "40")
 
 # Open the csv file and set up a reader
-with open("polygons.csv") as p:
+with open("sample.csv") as p:
     reader = csv.DictReader(p)
     for row in reader:
         # Add records for each polygon for name and area

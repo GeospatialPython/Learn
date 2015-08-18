@@ -15,7 +15,7 @@ with open("sample.csv") as p:
         # Add records for each polygon for name and area
         w.record(row["Name"], row["Area"])
         # parse the coordinate string
-        wkt = row["geometry_of_the_TT"][9:-2]
+        wkt = row["geometry"][9:-2]
         # break the coordinate string in to x,y values
         coords = wkt.split(",")
         # set up a list to contain the coordinates

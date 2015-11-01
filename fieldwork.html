@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Learning Geospatial Analysis with Python 2nd Ed. Field Data Collection Example</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+			background-color: #000000;
+			color: #FFFFFF;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+		html, body, #map {
+			height: 80%;
+		}
+		h1, h2, h3, h4{
+			color: #FFFFFF;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+		#info {
+			background-color: #FFFF00;
+			color: #FF0000;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+	</style>
+</head>
+<body>
+	<div>
+	<h3>Field Data Collection Example</h3>	
+	<font color="#009933">Learning Geospatial Analysis with Python 2nd Ed.</font>
+	</div>
+	<div id="map"></div>
+	<div id="info">Fill out the form below and click "Send" to post your location and data to QGIS.</div>
+	<div id="form">
+	<form id="obs">
+	<b>Name: </b><br/>
+	<input id="name" type="text" placeholder="Enter your name"><br/>
+	<b>Date: </b><br/>
+	<input id="date" type="date" placeholder="Today's date"></br>
+	<b>Comment: </b><br/>
+	<textarea id="comment" rows="4" cols="25">Enter a brief comment</textarea>
+	<br/>
+	<input type="button" value="SEND" onclick="sendData()">
+	</form>
+	</div>
+
+	<script>
+var map = L.map('map');
+var myJsonUrl = 'https://api.myjson.com/bins/3ztvz';
+var database = '';
+var lat = 0;
+var lon = 0;
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    id: 'examples.map-i875mjb7'
+}).addTo(map);
+
+function onLocationFound(e) {
+    var radius = e.accuracy / 2;
+    L.marker(e.latlng).addTo(map);
+    L.circle(e.latlng, radius).addTo(map);
+    lat = e.latlng.lat;
+    lon = e.latlng.lng;
+    retrieveData();
+}
+
+function onLocationError(e) {
+    alert(e.message);
+}
+
+function retrieveData() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", myJsonUrl, false);
+    xhr.send(null);
+    data = xhr.responseText;
+    database = JSON.parse(data);
+    //alert(data);
+}
+
+function sendData() {
+    frm_name = document.getElementById("name");
+    frm_date = document.getElementById("date");
+    frm_comment = document.getElementById("comment");
+    observation = {
+        "type": "Feature",
+            "properties": {
+            "NAME": frm_name.value,
+                "DATE": frm_date.value,
+                "COMMENT": frm_comment.value
+        },
+            "geometry": {
+            "type": "Point",
+                "coordinates": [lon, lat]
+        }
+    };
+    database["features"].push(observation)
+    var xhr = new XMLHttpRequest();
+    xhr.open("PUT", myJsonUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    // update the collected data as JSON
+    xhr.send(JSON.stringify(database));
+    info = document.getElementById("info");
+    info.innerHTML = "Your data was sent!!"
+}
+
+map.on('locationfound', onLocationFound);
+map.on('locationerror', onLocationError);
+map.locate({
+    setView: true,
+    maxZoom: 16
+});
+	</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Learning Geospatial Analysis with Python 2nd Ed. Field Data Collection Example "Database" Reset</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+			background-color: #000000;
+			color: #FFFFFF;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+		html, body, #map {
+			height: 80%;
+		}
+		h1, h2, h3, h4{
+			color: #FFFFFF;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+		#info {
+			background-color: #FFFF00;
+			color: #FF0000;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+	</style>
+</head>
+<body onload="retrieveData()">
+	<div>
+	<h3>Field Data Collection Example "Database" Reset</h3>	
+	<font color="#009933">Learning Geospatial Analysis with Python 2nd Ed.</font>
+	<p>
+	This page resets the simple MyJSON.com storage for this cookbook example to a single geojson feature to fix the inevitable 
+	<a href="http://www.joelonsoftware.com/articles/fog0000000319.html">Shlemiel problem</a> with this simple design.  This approach
+	keeps this example as simple and understandable as possible.</p>
+	</div>
+	<div id="form">
+	<form id="dbReset">
+	<input type="button" value="RESET" onclick="sendData()"><br/>
+	</form>
+	<b>Current stored geojson contents:</b><br/>
+	</div>
+	<div id="currentDb">
+	</div>
+
+	<script>
+var myJsonUrl = 'https://api.myjson.com/bins/467pm';
+var database = '';
+info = '';
+
+function retrieveData() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", myJsonUrl + "?pretty=1", false);
+    xhr.send(null);
+    data = xhr.responseText;
+    info = document.getElementById("currentDb");
+    info.innerHTML = "<pre>" + data + "</pre>";
+}
+
+function sendData() {
+    frm_name = document.getElementById("name");
+    frm_date = document.getElementById("date");
+    frm_comment = document.getElementById("comment");
+    observation = {"type": "FeatureCollection",
+      "crs": { "type": "name", 
+      "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+      "features": [
+      { "type": "Feature", 
+      "properties": { "popupContent": "NAME: Joel Lawhead<br> DATE: 2015-11-2<br> COMMENT: No ice found."}, 
+      "geometry": { "type": "Point", 
+      "coordinates": [ -101.467289719626166, 39.596844824675088 ] } }
+      ]};
+    var xhr = new XMLHttpRequest();
+    xhr.open("PUT", myJsonUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    // update the collected data as JSON
+    obs = JSON.stringify(observation);
+    xhr.send(obs);
+    info.innerHTML = "<pre>" + obs + "</pre>";
+}
+	</script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="en-us"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <!-- www.phpied.com/conditional-comments-block-downloads/ -->
+    <!-- Always force latest IE rendering engine
+         (even in intranet) & Chrome Frame
+         Remove this if you use the .htaccess -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--  Mobile Viewport Fix
+          j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag
+          device-width: Occupy full width of the screen in its current orientation
+          initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
+          user-scalable = yes allows the user to zoom in -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polygon</title>
+    <!-- http://dev.w3.org/html5/markup/meta.name.html -->
+    <meta name="application-name" content="MIST">
+    <!-- Speaking of Google, don't forget to set your site up:
+         http://google.com/webmasters -->
+    <meta name="google-site-verification" content="">
+
+<meta name="keywords" content="" />
+<meta name="description" content="A web-based system enhancing crop performance with water management based on crop needs." />
+<meta name="author" content="Mississippi State University &lt;jlawhead@nvs-inc.com&gt;" />
+
+ <!-- this includes jquery.js, calendar.js/.css and web2py.js -->
+</script><link href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" rel="stylesheet" type="text/css" /><script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js" type="text/javascript"></script><link href="Leaflet.NavBar.css" rel="stylesheet" type="text/css" /><link href="leaflet.draw.css" rel="stylesheet" type="text/css" /><script src="Leaflet.NavBar.js" type="text/javascript"></script><script src="leaflet.draw.js" type="text/javascript"></script><script src="leaflet.draw-src.js" type="text/javascript"></script>    
+    
+  </head>
+  <body>
+
+    <!-- Masthead ===================================== -->    
+    
+    
+    <!-- Main ========================================= -->
+    <!-- Begin page content -->
+    <div class="container-fluid main-container">
+      
+
+      <div class="col-md-12">
+        
+        
+<h1>Draw a Polygon on a Map</h1>
+<div id="map" style="width: 600px; height: 400px"></div>
+
+<script>
+    // Convert a leaflet layer to WKT
+    function toWKT(layer) {
+        var lng, lat, coords = [];
+        if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
+            var latlngs = layer.getLatLngs();
+            for (var i = 0; i < latlngs.length; i++) {
+    	    	latlngs[i]
+    	    	coords.push(latlngs[i].lng + " " + latlngs[i].lat);
+    	        if (i === 0) {
+    	        	lng = latlngs[i].lng;
+    	        	lat = latlngs[i].lat;
+    	        }
+    	};
+            if (layer instanceof L.Polygon) {
+                return "POLYGON((" + coords.join(",") + "," + lng + " " + lat + "))";
+            } else if (layer instanceof L.Polyline) {
+                return "LINESTRING(" + coords.join(",") + ")";
+            }
+        } else if (layer instanceof L.Marker) {
+            return "POINT(" + layer.getLatLng().lng + " " + layer.getLatLng().lat + ")";
+        }
+    }
+
+        var map = L.map('map').setView([32.742, -89.558], 7);
+        L.control.navbar().addTo(map);
+        mapLink = '<a href="http://www.esri.com/">Esri</a>';
+        wholink = 'i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
+        L.tileLayer(
+            'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; '+mapLink+', '+wholink,
+            maxZoom: 18,
+            }).addTo(map);
+        L.tileLayer(
+            'http://services.arcgisonline.com/arcgis/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+            maxZoom: 18,
+            }).addTo(map);
+
+        // Initialise the FeatureGroup to store editable layers
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        // Draw Control options
+        var options = {
+          draw: {
+                  polygon: {
+                  allowIntersection: false, // Restricts shapes to simple polygons
+                  drawError: {
+                              color: '#000000', // Color the shape will turn when intersects
+                               message: '<strong>Intersection Error!<strong> Polygon lines cannot overlap!' // Message that will show when intersect
+                             },
+                  shapeOptions: {
+                          color: '#ff0000'
+                      }
+                  },
+                  rectangle: {
+                    shapeOptions: {
+                        color: '#ff0000'
+                    }
+                  },
+                  circle: false,
+                  polyline: false,
+                  marker: false
+          },
+            edit: {
+                featureGroup: drawnItems
+            }
+        };
+
+      // Initialise the draw control and pass it the FeatureGroup of editable layers
+      var drawControl = new L.Control.Draw(options);
+      map.addControl(drawControl);
+		map.on('draw:created', function (e) {
+			var type = e.layerType,
+			layer = e.layer;
+            var wkt = toWKT(layer);
+            document.getElementById('field_geom').value = wkt;
+			drawnItems.addLayer(layer);
+            layer.bindPopup(wkt);
+		});
+    </script>
+<form action="#" enctype="multipart/form-data" method="post"><input id="field_geom" name="poly" type="text" size="100"/></form>
+
+        
+      </div>
+
+      
+
+    </div>
+
+     <!-- this is default footer -->      
+    <footer class="footer">
+      <div class="container-fluid">
+      </div>
+    </footer>
+    
+  </body>
+</html>

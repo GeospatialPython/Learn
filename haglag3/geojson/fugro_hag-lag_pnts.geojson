@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                
+"features": [
+{ "type": "Feature", "properties": { "PolyID": 545, "PntType": "HAG", "Z": 1.971000, "Z_FT": 6.466536 }, "geometry": { "type": "Point", "coordinates": [ -81.964329663493913, 26.503621896677, 0.0 ] } },
+{ "type": "Feature", "properties": { "PolyID": 545, "PntType": "LAG", "Z": 1.826000, "Z_FT": 5.990814 }, "geometry": { "type": "Point", "coordinates": [ -81.964387285749211, 26.503739592763967, 0.0 ] } }
+]
+}

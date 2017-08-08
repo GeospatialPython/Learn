@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QRisq - The "What If" Company</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FAV ICONS -->
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="./icons/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./icons/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./icons/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./icons/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="./icons/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="./icons/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="./icons/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="./icons/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="./icons/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="./icons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="./icons/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./icons/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="./icons/favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="./icons/mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="./icons/mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="./icons/mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="./icons/mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="./icons/mstile-310x310.png" />
+
+
+    <!-- CSS LIBRARIES -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!-- Optional Bootstrap theme CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+    <!-- DataTables JQuery CSS -->    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"> 
+    <!-- DataTables Buttons CSS -->       
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">  
+    <!-- DataTables Bootstrap CSS -->       
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">      
+    <!-- Leaflet Label CSS -->       
+    <link rel="stylesheet" href="./css/leaflet.label.css">  
+    <!-- Bootstrap Toggle Buttons -->
+    <link rel="stylesheet" href="./css/titatoggle-dist-min.css">    
+
+                                       
+    <!-- JAVASCRIPT LIBRARIES -->
+    <!-- jQuery JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>    
+    <!-- Leaflet JS -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+    <!-- Esri Leaflet JS -->
+    <script src="./js/esri-leaflet.js"></script>
+    <!-- Leaflet Providers Plugin JS -->        
+    <script src="./js/leaflet-providers.js"></script>
+    <!-- Leaflet AJAX Layer Plugin JS (for GeoJSON) -->    
+    <script src="./js/leaflet.ajax.min.js"></script>
+    <!-- DataTables JQuery JS -->
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Bootstrap JS -->
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+    <!-- DataTables Select Plugin JS -->
+    <script src="./js/dataTables.select.min.js"></script>
+    <!-- Polyline decorator Plugin JS -->
+    <script src="./js/leaflet.polylineDecorator.js"></script>
+    <!-- Leaflet Grids Plugin JS -->
+    <script src="./js/leaflet-grids.js"></script>
+    <script src="./js/leaflet-control.js"></script>
+    <script src="./js/mgrs.js"></script>    
+    <!-- Leaflet Label JS -->
+    <script src="./js/leaflet.label.js"></script>
+
+	<style>
+        td {
+             font-size: 10px;
+        }
+
+        th {
+            text-align: center;
+            font-size: 10px;
+        }
+
+		html, body {
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+        
+        #logo {
+            background: #838080;  
+        }
+        
+        #map {
+            float: left;
+            padding: 0;
+            width: 48vw; 
+            height: 94vh;   
+        }
+        
+        #hagTable {
+            background: #FFFFFF;
+        } 
+        
+        #hagTbl th {
+            background: #FF9933;
+        }
+        
+        #lagTable {     
+            background: #FFFFFF;
+        }  
+
+        #lagTbl th {     
+            background: #FFFF00;
+        }  
+              
+        .grid-label {
+            text-align:center;
+            text-shadow: 2px 2px 5px #fff, -2px -2px 5px #fff;
+        }
+        
+        .dist-label {
+            color: #FFFFFF;
+            background: rgba(0, 0, 0, 0.3);
+            padding-left: 3px;
+            padding-right: 3px;
+            border-color: rgba(255, 255, 255, 0.6);
+            border-style: solid;
+            border-width: 1px 2px 2px 2px;   
+        }
+        
+        .vertical { transform: rotate(-90deg);
+        } 
+        
+        .strike {
+            text-decoration: line-through;
+        }
+           
+	</style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- LOGO -->
+            <div id="logo" class="col-12 no-gutters">
+                <img height="50" width="127" src="images/logo.png">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 no-gutters">
+                <!-- MAP -->
+                <div id="map"></div>
+            </div>
+            <div class="col-md-6 no-gutters">
+                <div class="row">
+                    <div class="container-fluid">
+                      <div id="hagTable">
+                            <table id="hagTbl" class="table table-striped table-bordered"></table>
+                        </div>
+                    </div>
+                </div>            
+                <div class="row">
+                    <div class="container-fluid">
+                        <div id="lagTable">
+                            <table id="lagTbl" class="table table-striped table-bordered"></table>
+                        </div>
+                    </div>
+                </div>            
+            </div>        
+        </div>    
+    </div>
+    
+
+<script type="text/javascript">
+
+
+    // GeoJSON Layers
+    var parcel_geojson = "./geojson/parcel.geojson";
+    var lidar_geojson = "./geojson/lidar.geojson";
+    var hag_geojson = "./geojson/HAG_candidates.geojson";
+    var lag_geojson = "./geojson/LAG_candidates.geojson";
+    
+    // Background Aerial Image Service
+    var image_service = "http://leegis.leegov.com/arcgis/rest/services/Aerials/Aerials2016/ImageServer";
+    var attribution_text = "Lee County, Florida GIS Department" // Acknowledgement
+
+    // Data tables
+    var hagTable;
+    var lagTable;
+    
+    // Layer attributes for data table
+    var HAGDataSet = [];
+    var LAGDataSet = [];
+
+    // Keep track of deleted features
+    var hagDelete = [];
+    var lagDelete = [];
+    
+    // Collection of layers to trigger popup information
+    var layers;      
+
+    // INITIALIZE MAP
+    var map = L.map('map', {
+        center: [26.503689, -81.964396],
+        zoom: 21,
+        zoomControl: true
+    });
+    
+    // Limit zoom lefts so the scale bar doesn't explode across the screen
+    map.options.maxZoom = 26;
+    
+    // On popups, grab the marker id and select the table row
+    map.on('popupopen', function(e) {
+        var marker_id = e.popup._source.feature.properties.ID;
+        var lyr = e.popup._source.feature.properties.lyr;
+        
+        if (lyr == "HAG") {
+            hagTable.$('tr.selected').removeClass('selected');
+            var ids = $.map(hagTable.rows().data(), function (item){
+                return item[1];                   
+            });
+            
+            for (i=0; i < ids.length; i++) {
+                if (ids[i] == marker_id) {
+                    hagTable.row(i).select();                     
+                }
+            } 
+        }
+
+        if (lyr == "LAG") {
+            lagTable.$('tr.selected').removeClass('selected');
+            var ids = $.map(lagTable.rows().data(), function (item){
+                return item[1];                   
+            });
+            
+            for (i=0; i < ids.length; i++) {
+                if (ids[i] == marker_id) {
+                    lagTable.row(i).select();                     
+                }
+            } 
+        }
+    });    
+
+    // Parcel style
+    var parcelStyle = {
+        "fillColor": "#ABFE02",
+        "fillOpacity": 0,
+        "weight": 5,
+        "color": "#ABFE02",
+        "opacity": .6
+    };
+
+    // Lidar points style
+    var lidarOptions = {
+        radius: 2,
+        fillColor: "#02F6FE",
+        color: "#000",
+        weight: 1,
+        opacity: 0,
+        fillOpacity: 0.8
+    };
+
+    // HAG points style
+    var geojsonHAGOptions = {
+        radius: 8,
+        fillColor: "#FF9933",
+        color: "#000",
+        weight: 1,
+        opacity: .5,
+        fillOpacity: 1
+    };
+
+    // Hidden HAG points style
+    var geojsonHAGHideOptions = {
+        radius: 1,
+        fillColor: "#FF9933",
+        color: "#FF6600",
+        weight: 1,
+        opacity: 0,
+        fillOpacity: 0
+    };
+
+    // LAG points style
+    var geojsonLAGOptions = {
+        radius: 8,
+        fillColor: "#FFFF00",
+        color: "#000",
+        weight: 1,
+        opacity: .5,
+        fillOpacity: 1
+    };
+
+    // Hidden LAG points style
+    var geojsonLAGHideOptions = {
+        radius: 1,
+        fillColor: "#FF9933",
+        color: "#FF6600",
+        weight: 1,
+        opacity: 0,
+        fillOpacity: 0
+    };
+   
+    // ESRI IMAGE SERVICE LAYER
+    var imageLayer = L.esri.imageMapLayer({
+      url: image_service,
+      attribution: attribution_text
+    }).bringToBack().addTo(map);
+
+    // PARCEL LAYER
+    var parcelLayer = new L.GeoJSON.AJAX(parcel_geojson, {
+        style: parcelStyle
+    }).addTo(map);
+    
+    // PARCEL MEASUREMENT GRATICULES
+    var parcelDecorator = L.polylineDecorator(parcelLayer, {
+        patterns: [
+            {repeat: 20, symbol: L.Symbol.marker({pixelSize: 50})}
+        ]    
+    }).addTo(map);    
+    
+    // LIDAR LAYER
+    var lidarLayer = new L.GeoJSON.AJAX(lidar_geojson,{
+            pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, lidarOptions);
+        }
+    });
+    
+    // HAG LAYER
+    var hagLayer = new L.GeoJSON.AJAX(hag_geojson,{
+            pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, geojsonHAGOptions);
+            },
+            onEachFeature: function(feature, layer) {
+                // Set up data table
+                var hag_lyr_id = layer.feature.properties.ID;
+                var hag_toggle = '<div class="checkbox checkbox-slider--b-flat"><label><input type="checkbox" onchange="toggleHAG(' + hag_lyr_id + ')" checked><span></span></label></div>';
+                row = [hag_toggle, hag_lyr_id, layer.feature.properties.long, layer.feature.properties.lat, layer.feature.properties.z];
+                HAGDataSet.push(row); 
+                layer.feature.properties.lyr = "HAG";
+                layer.bindPopup("HAG ID: " + hag_lyr_id); 
+                layer.bindLabel("H" + hag_lyr_id, { noHide: true });
+            }
+    }).addTo(map);  
+    
+    // LAG LAYER
+    var lagLayer = new L.GeoJSON.AJAX(lag_geojson,{
+            pointToLayer: function (feature, latlng) {
+            return L.circleMarker(latlng, geojsonLAGOptions);
+            },
+            onEachFeature: function(feature, layer) {
+                // Set up data table
+                var lag_lyr_id = layer.feature.properties.ID;            
+                var lag_toggle = '<div class="checkbox checkbox-slider--b-flat"><label><input type="checkbox" onchange="toggleLAG(' + lag_lyr_id + ')" checked><span></span></label></div>';
+                row = [lag_toggle, lag_lyr_id, layer.feature.properties.long, layer.feature.properties.lat, layer.feature.properties.z];
+                LAGDataSet.push(row);
+                layer.feature.properties.lyr = "LAG";                
+                layer.bindPopup("LAG ID: " + lag_lyr_id);
+                layer.bindLabel("L" + lag_lyr_id, { noHide: true });               
+            }
+    }).addTo(map);  
+
+    // DISTANCE GRID LAYER
+    var options = {
+        gridType: 'distance',
+        showMetric: false,
+    };
+    var scale = L.control.gridscale(options); 
+    scale.addTo(map);
+
+    var grid = L.grids.distance.imperial();
+    grid.addTo(map);    
+
+    // Check if a LAG point has been deleted    
+    function hagIsGone(id) {
+            var i;
+            for (i = 0; i < hagDelete.length; i++) {
+                if (hagDelete[i] == id) {
+                    return true;
+                }
+            }
+            return false;
+        }        
+     
+     // Check if a LAG point has been deleted
+     function lagIsGone(id) {
+            var i;
+            for (i = 0; i < lagDelete.length; i++) {
+                if (lagDelete[i] == id) {
+                    return true;
+                }
+            }
+            return false;
+        }      
+    
+    // UPDATE THE HAG LAYER - remove deleted points
+    function changeHAG(){
+        map.removeLayer(hagLayer);
+        HAGDataSet = [];
+        hagLayer = new L.GeoJSON.AJAX(hag_geojson,{
+            pointToLayer: function (feature, latlng) {
+                if (hagIsGone(feature.properties.ID)) {
+                    return L.circleMarker(latlng, geojsonHAGHideOptions);
+                } else {
+                    return L.circleMarker(latlng, geojsonHAGOptions);                
+                }
+            },
+            onEachFeature: function(feature, layer) {
+                var hag_lyr_id = layer.feature.properties.ID
+                row = [hag_lyr_id, layer.feature.properties.long, layer.feature.properties.lat, layer.feature.properties.z];
+                layer.feature.properties.lyr = "HAG";
+                layer.bindPopup("HAG ID: " + hag_lyr_id);
+                if (!hagIsGone(feature.properties.ID)) {  
+                    layer.bindLabel("H" + hag_lyr_id,{ noHide: true });
+                }            
+            }
+        }).addTo(map);        
+    }
+
+    //TOGGLE THE HAG LAYER
+    function toggleHAG(hag_lyr_id) {
+        var hagRow = hagTable.row(hag_lyr_id - 1).node();
+        if (hagIsGone(hag_lyr_id)) {
+            var i = hagDelete.indexOf(hag_lyr_id);
+            hagDelete.splice(i, 1);
+            $(hagRow).removeClass('strike');
+        } else {          
+            hagDelete.push(hag_lyr_id);
+            $(hagRow).addClass('strike');
+        }
+        changeHAG();
+    }
+
+    // UPDATE THE LAG LAYER - remove deleted points    
+     function changeLAG(){
+        map.removeLayer(lagLayer);
+        LAGDataSet = [];
+        lagLayer = new L.GeoJSON.AJAX(lag_geojson,{
+            pointToLayer: function (feature, latlng) {
+                if (lagIsGone(feature.properties.ID)) {
+                    return L.circleMarker(latlng, geojsonLAGHideOptions);
+                } else {
+                    return L.circleMarker(latlng, geojsonLAGOptions);                
+                }
+            },
+            onEachFeature: function(feature, layer) {
+                row = [layer.feature.properties.ID, layer.feature.properties.long, layer.feature.properties.lat, layer.feature.properties.z];
+                layer.feature.properties.lyr = "LAG";                
+                layer.bindPopup("LAG ID: " + layer.feature.properties.ID); 
+                if (!lagIsGone(feature.properties.ID)) { 
+                    layer.bindLabel("L" + layer.feature.properties.ID,{ noHide: true });                 
+                }
+            }
+        }).addTo(map);         
+    }  
+
+    //TOGGLE THE LAG LAYER
+    function toggleLAG(lag_lyr_id) {
+        var lagRow = lagTable.row(lag_lyr_id - 1).node();
+        if (lagIsGone(lag_lyr_id)) {
+            var i = lagDelete.indexOf(lag_lyr_id);
+            lagDelete.splice(i, 1);
+            $(lagRow).removeClass('strike');
+        } else {          
+            lagDelete.push(lag_lyr_id);
+            $(lagRow).addClass('strike');
+        }
+        changeLAG();
+    }
+
+    var baseMaps = {
+        "Imagery": imageLayer
+    };
+    
+    var overlayMaps = {
+        "Parcel": parcelLayer,          
+        "HAG Candidates": hagLayer,
+        "LAG Candidates": lagLayer,
+        "Lidar": lidarLayer,
+        "Grid" : grid
+    };
+    
+    L.control.layers(baseMaps, overlayMaps).addTo(map);
+ 
+     // SETUP DATA TABLES - when DOM is ready   
+    $(document).ready(function() {
+        // HAG TABLE 
+        hagTable = $('#hagTbl').DataTable( {
+            data: HAGDataSet,
+            columns: [
+                { title: "Off/On" },
+                { title: "HAG ID" },
+                { title: "X" },
+                { title: "Y" },
+                { title: "Z" }
+            ],
+            lengthChange: false,
+            searching: false,
+            paging: false,
+            autoWidth: true,
+            info: false,
+            compact: true                         
+        } );
+        
+        // LAG TABLE
+        lagTable = $('#lagTbl').DataTable( {
+            data: LAGDataSet,
+            columns: [
+                { title: "Off/On" },
+                { title: "LAG ID" },
+                { title: "X" },
+                { title: "Y" },
+                { title: "Z" }
+            ],
+            lengthChange: false,
+            searching: false,
+            paging: false,
+            autoWidth: true,
+            info: false,
+            compact: true          
+        } );      
+        
+        // HAG TABLE FUNCTIONS
+        $('#hagTbl tbody').on( 'click', 'tr', function () {
+            map.closePopup();
+            if ( $(this).hasClass('selected') ) {
+                $(this).removeClass('selected');
+            }
+            else {
+                hagTable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                layers = hagLayer.getLayers();
+                var hag_id = hagTable.row('.selected').data()[1] - 1;
+                layers[hag_id].openPopup();
+            }
+        } );
+        
+        // LAG TABLE FUNCTIONS
+        $('#lagTbl tbody').on( 'click', 'tr', function () {
+            map.closePopup();
+            if ( $(this).hasClass('selected') ) {
+                $(this).removeClass('selected');              
+            }
+            else {
+                lagTable.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                layers = lagLayer.getLayers();
+                var lag_id = lagTable.row('.selected').data()[1] - 1;
+                layers[lag_id].openPopup();
+            }
+        } ); 
+    }); 
+</script>  
+</body>
+</html>

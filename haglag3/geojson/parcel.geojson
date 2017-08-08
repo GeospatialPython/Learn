@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+                                                                                
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID": 13429, "APN": "01462302000000480", "APN2": null, "STATE": "FL", "COUNTY": "LEE", "FIPS": "12071", "SIT_HSE_NU": "48", "SIT_DIR": null, "SIT_STR_NA": "Poplar", "SIT_STR_SF": "Pl", "SIT_FULL_S": "48 POPLAR PL", "SIT_CITY": "Fort Myers", "SIT_STATE": "FL", "SIT_ZIP": "33908", "SIT_ZIP4": "3021", "SIT_POST": null, "LAND_VALUE": "36500", "IMPR_VALUE": null, "TOT_VALUE": null, "ASSMT_YEAR": null, "MKT_LAND_V": null, "MKT_IMPR_V": null, "TOT_MKT_VA": null, "MKT_VAL_YR": null, "REC_DATE": null, "SALES_PRIC": null, "SALES_CODE": null, "YEAR_BUILT": null, "CONST_TYPE": null, "STD_LAND_U": null, "LOT_SIZE": "4060", "BLDG_AREA": null, "NO_OF_STOR": null, "NO_OF_UNIT": null, "BEDROOMS": null, "BATHROOMS": null, "OWNER": "PLANTATION ESTS", "OWNER2": null, "OWNADDRESS": "PO BOX 2085", "OWNADDRES2": null, "OWNCTYSTZP": null, "Xcoord": -81.964383, "Ycoord": 26.503659, "minX": -81.964509, "minY": 26.503567, "maxX": -81.964259, "maxY": 26.503752, "Shape_Leng": 0.000780, "Shape_Area": 0.000000 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -81.964269202499821, 26.50371816077709, 0.0 ], [ -81.964267453495452, 26.503580073742906, 0.0 ], [ -81.964512506567615, 26.503625603748564, 0.0 ], [ -81.96451767557302, 26.503765633783189, 0.0 ], [ -81.964269202499821, 26.50371816077709, 0.0 ] ] ] } }
+]
+}

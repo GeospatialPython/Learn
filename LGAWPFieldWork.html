@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Field Data Collection Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+			background-color: #000000;
+			color: #FFFFFF;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+		html, body, #map {
+			height: 80%;
+		}
+		h1, h2, h3, h4{
+			color: #FFFFFF;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+		#info {
+			background-color: #FFFF00;
+			color: #FF0000;
+			font-family: Verdana, Arial, Sans-serif;
+		}
+	</style>
+</head>
+<body>
+    <h1>Field Data Collection Form</h1>
+    <div id="map"></div>
+    This is the real-time field data collection example for the book "Learning Geospatial Analysis with Python". Allow the browser to get your location, fill out the form below, and click submit. Then follow the instructions in the book to turn the data into a Leaflet map. 
+    <hr>
+    <form id="dataForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br>
+
+        <label for="comment">Comment:</label>
+        <input type="text" id="comment" name="comment"><br>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date"><br>
+        <input type="button" value="Submit" onclick="submitData()">
+    </form>
+    <script>
+        const apiKey = "$2b$10$lypZoIQPtYtz1PTSk75KjuzUGMnupW1pSJdqtU.wSnmXuGZTDjIpy";  // Replace with your actual API key
+        const jsonBinUrl = "https://api.jsonbin.io/v3/b/64fe6ae18d92e126ae6a1a23";  // Replace with your bin ID
+        var map = L.map('map');
+        var lat = 0;
+        var lon = 0;
+
+        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            id: 'examples.map-i875mjb7'
+        }).addTo(map);
+
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+            L.marker(e.latlng).addTo(map);
+            L.circle(e.latlng, radius).addTo(map);
+            lat = e.latlng.lat;
+            lon = e.latlng.lng;
+        }
+
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        async function fetchData() {
+            try {
+                const response = await fetch(jsonBinUrl, {
+                    headers: {
+                        'X-Master-Key': apiKey
+                    }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log("Fetched data:", data);  // Debugging line
+                    return data || [];  // Return the whole fetched data
+                } else {
+                    console.error("Failed to fetch data:", response.status);
+                    return [];
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                return [];
+            }
+        }
+
+
+        
+        async function submitData() {
+            const existingData = await fetchData();
+            record = await existingData["record"]
+            //console.log(record)
+            const name = document.getElementById("name").value;
+            const comment = document.getElementById("comment").value;
+            const date = document.getElementById("date").value;
+
+            const newData = {
+                "type": "Feature",
+                "properties": {
+                    "NAME": name,
+                    "DATE": date,
+                    "COMMENT": comment
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [lon, lat]
+                }
+            };
+
+            record["features"].push(newData);  // Add new data to the beginning
+            if (record["features"].length > 4) {
+                console.log(record["features"].shift());
+            }
+            if (record["features"].length > 5) {
+                console.log(record["features"].shift());
+            }
+            console.log( record["features"].length);
+
+            try {
+                const response = await fetch(jsonBinUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': apiKey
+                    },
+                    body: JSON.stringify(record)
+                });
+
+                if (response.ok) {
+                    alert("Data submitted successfully.");
+                } else {
+                    alert("Failed to submit data.");
+                }
+            } catch (error) {
+                console.error("Error sending data: ", error);
+                //alert("An error occurred while sending data.");
+            }
+        }
+
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+        map.locate({
+            setView: true,
+            maxZoom: 16
+        });
+    </script>
+</body>
+</html>
